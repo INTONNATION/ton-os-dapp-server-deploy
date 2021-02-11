@@ -1,0 +1,4 @@
+# proxy service
+auth: true
+username: admin
+password: admin123

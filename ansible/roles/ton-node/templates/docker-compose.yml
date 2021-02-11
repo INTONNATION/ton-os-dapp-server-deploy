@@ -1,0 +1,41 @@
+version: '2.2'
+services:
+  node:
+    build:
+      context: ./build
+    # image: "${NODE_IMAGE}"
+    container_name: rnode
+    restart: unless-stopped
+    environment:
+      MEM_LIMIT: '{{ MEM_LIMIT }}'
+      ADNL_PORT: '{{ ADNL_PORT }}'
+      VALIDATOR_NAME: '{{ VALIDATOR_NAME }}'
+      NETWORK_TYPE: '{{ NETWORK_TYPE }}'
+      CONFIGS_PATH: '{{ CONFIGS_PATH }}'
+      STATSD_DOMAIN: '{{ STATSD_DOMAIN }}'
+      STATSD_PORT: '{{ STATSD_PORT }}'
+#      STAKE: '{{ STAKE }}'
+#      MSIG_ENABLE: '{{ MSIG_ENABLE }}'
+#      SDK_URL: '{{ SDK_URL }}'
+    ports:
+      - "{{ ADNL_PORT }}:{{ ADNL_PORT }}/udp"
+    networks:
+      - proxy_nw
+    volumes:
+      - ./configs/:/ton-node/configs/
+      - ./logs/:/ton-node/logs/
+      - DB:/ton-node/node_db/
+    command: ["normal"]
+    mem_limit: '{{ MEM_LIMIT }}'
+    logging: 
+      driver: gelf 
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "node"
+    cap_add:
+      - SYS_PTRACE
+networks:
+  proxy_nw:
+    external: true
+volumes:
+  DB:

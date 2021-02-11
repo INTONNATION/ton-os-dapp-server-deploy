@@ -1,0 +1,170 @@
+version: '2.3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.3.1
+    container_name: zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: '{{ ZOOKEEPER_CLIENT_PORT }}'
+      ZOOKEEPER_TICK_TIME: '{{ ZOOKEEPER_TICK_TIME }}'
+      ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
+    networks:
+      - proxy_nw
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc -w 2 zookeeper 2181"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "zookeeper"
+
+  kafka:
+    image: confluentinc/cp-kafka:5.3.1
+    container_name: kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    expose:
+      - "9092"
+    networks:
+      - proxy_nw
+    environment:
+      KAFKA_BROKER_ID: '{{ KAFKA_BROKER_ID }}'
+      KAFKA_ZOOKEEPER_CONNECT: '{{ KAFKA_ZOOKEEPER_CONNECT }}'
+      KAFKA_ADVERTISED_LISTENERS: '{{ KAFKA_ADVERTISED_LISTENERS }}'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: '{{ KAFKA_LISTENER_SECURITY_PROTOCOL_MAP }}'
+      KAFKA_INTER_BROKER_LISTENER_NAME: '{{ KAFKA_INTER_BROKER_LISTENER_NAME }}'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '{{ KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR }}'
+      KAFKA_JMX_PORT: '{{ KAFKA_JMX_PORT }}'
+      KAFKA_LOG_RETENTION_HOURS: '{{ KAFKA_LOG_RETENTION_HOURS }}'
+      KAFKA_LOG_ROLL_MS: '{{ KAFKA_LOG_ROLL_MS }}'
+      KAFKA_LOG_SEGMENT_BYTES: '{{ KAFKA_LOG_SEGMENT_BYTES }}'
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: '{{ KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS }}'
+      KAFKA_CLEANUP_POLICY: '{{ KAFKA_CLEANUP_POLICY }}'
+      KAFKA_RETENTION_MS: '{{ KAFKA_RETENTION_MS }}'
+      KAFKA_MESSAGE_MAX_BYTES: '{{ KAFKA_MESSAGE_MAX_BYTES }}'
+      KAFKA_RECEIVE_MESSAGE_MAX_BYTES: '{{ KAFKA_RECEIVE_MESSAGE_MAX_BYTES }}'
+      KAFKA_REPLICA_FETCH_MAX_BYTES: '{{ KAFKA_REPLICA_FETCH_MAX_BYTES }}'
+      ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
+    volumes:
+      - data:/var/lib/kafka/data
+    logging: 
+      driver: gelf 
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "kafka"
+
+  connect:
+    image: confluentinc/cp-kafka-connect:5.3.1
+    container_name: connect
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+      - kafka
+      - schema-registry
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: '{{ CONNECT_BOOTSTRAP_SERVERS }}'
+      CONNECT_REST_ADVERTISED_HOST_NAME: '{{ CONNECT_REST_ADVERTISED_HOST_NAME }}'
+      CONNECT_REST_PORT: '{{ CONNECT_REST_PORT }}'
+      CONNECT_GROUP_ID: '{{ CONNECT_GROUP_ID }}'
+      CONNECT_CONFIG_STORAGE_TOPIC: '{{ CONNECT_CONFIG_STORAGE_TOPIC }}'
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: '{{ CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR }}'
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: '{{ CONNECT_OFFSET_FLUSH_INTERVAL_MS }}'
+      CONNECT_OFFSET_STORAGE_TOPIC: '{{ CONNECT_OFFSET_STORAGE_TOPIC }}'
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: '{{ CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR }}'
+      CONNECT_STATUS_STORAGE_TOPIC: '{{ CONNECT_STATUS_STORAGE_TOPIC }}'
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: '{{ CONNECT_STATUS_STORAGE_REPLICATION_FACTOR }}'
+      CONNECT_KEY_CONVERTER: '{{ CONNECT_KEY_CONVERTER }}'
+      CONNECT_VALUE_CONVERTER: '{{ CONNECT_VALUE_CONVERTER }}'
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: '{{ CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL }}'
+      CONNECT_INTERNAL_KEY_CONVERTER: '{{ CONNECT_INTERNAL_KEY_CONVERTER }}'
+      CONNECT_INTERNAL_VALUE_CONVERTER: '{{ CONNECT_INTERNAL_VALUE_CONVERTER }}'
+      CONNECT_ZOOKEEPER_CONNECT: '{{ CONNECT_ZOOKEEPER_CONNECT }}'
+      CLASSPATH: '{{ CLASSPATH }}'
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: '{{ CONNECT_PRODUCER_INTERCEPTOR_CLASSES }}'
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: '{{ CONNECT_CONSUMER_INTERCEPTOR_CLASSES }}'
+      CONNECT_PLUGIN_PATH: '{{ CONNECT_PLUGIN_PATH }}'
+      CONNECT_LOG4J_LOGGERS: '{{ CONNECT_LOG4J_LOGGERS }}'
+      KAFKA_JMX_PORT: '{{ CONNECT_KAFKA_JMX_PORT }}'
+      CONNECT_FETCH_MESSAGE_MAX_BYTES: '{{ CONNECT_FETCH_MESSAGE_MAX_BYTES }}'
+      CONNECT_MAX_REQUEST_SIZE: '{{ CONNECT_MAX_REQUEST_SIZE }}'
+      CONNECT_MAX_PARTITION_FETCH_BYTES: '{{ CONNECT_MAX_PARTITION_FETCH_BYTES }}'
+      ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
+    networks:
+      - proxy_nw
+    volumes:
+      - ./files/kafka-connect-arangodb:/usr/share/java/kafka-connect-arangodb
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -f http://connect:8083/"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    mem_limit: 30G
+    logging: 
+      driver: gelf 
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "connect"
+
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:5.3.1
+    hostname: schema-registry
+    container_name: schema-registry
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+      - kafka
+    expose:
+      - 8081
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: '{{ SCHEMA_REGISTRY_HOST_NAME }}'
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: '{{ SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL }}'
+      SCHEMA_REGISTRY_JMX_PORT: '{{ SCHEMA_REGISTRY_JMX_PORT }}'
+      ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
+    logging: 
+      driver: gelf 
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "schema-registry"
+    networks:
+      - proxy_nw
+    volumes:
+      - ./launch.sh:/etc/confluent/docker/launch
+
+  check-connect:
+    build:
+      context: build_check
+    container_name: check-connect
+    restart: unless-stopped
+    depends_on:
+      connect:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "/work/check.sh connect"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    environment:
+      ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
+    networks:
+      - proxy_nw
+    logging: 
+      driver: gelf 
+      options:
+        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
+        tag: "check-connect"
+
+
+networks:
+  proxy_nw:
+    external: true
+
+volumes:
+  data:
