@@ -1,0 +1,104 @@
+---
+
+- name: Create config directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    group: rust
+    owner: rustnode
+    mode: '0755'
+  with_items:
+    - "{{ rustnode_conf_dir }}"
+    - "{{ database_path }}"
+  tags:
+   - install
+   - upgrade
+   - reinstall
+
+- name: Save key pair in config directory
+  copy:
+    content: "{{ item.key }}"
+    dest: "{{ rustnode_conf_dir }}/{{ item.value }}"
+    owner: rustnode
+    group: rust
+  tags:
+   - install
+   - reinstall
+   - debug
+  with_items:
+   - { "key": "{{ console_pvt }}","value": "console" }
+   - { "key": "{{ console_pub }}","value": "console.pub" }
+
+- name: Download {{ network }} global config 
+  get_url:
+    url: "{{ ton_network_global_conf_url }}"
+    dest: "{{ rustnode_conf_dir }}/ton-global.config.json"
+    owner: rustnode
+    group: rust
+  tags:
+   - install
+   - upgrade
+   - reinstall
+
+- name: Template config files and systemd service
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: rustnode
+    group: rust
+  with_items:
+    - {"src": "rustnode.service.j2", "dest": "/etc/systemd/system/rustnode.service"}
+    - {"src": "default_config.json.j2", "dest": "{{ rustnode_conf_dir }}/default_config.json"}
+    - {"src": "log_cfg.yml.j2", "dest": "{{ rustnode_conf_dir }}/log_cfg.yml"}
+    - {"src": "console_template.json.j2", "dest": "{{ rustnode_conf_dir }}/console_template.json"}
+  tags:
+   - install
+   - upgrade
+   - reinstall
+
+- name: Start rust_node
+  systemd:
+    enabled: yes
+    state: "restarted"
+    name: "rustnode"
+    daemon_reload: yes
+  tags:
+   - install
+   - upgrade
+   - reinstall
+
+- name: Modify console.json
+  shell: >
+    jq ".client_key = $(jq . {{ rustnode_conf_dir }}/console)" "{{ rustnode_conf_dir }}/console_config.json"
+  register: json
+  tags:
+   - install
+   - reinstall
+
+- name: Modify console.json
+  copy:
+    content: "{{ json.stdout }}"
+    dest: "{{ rustnode_conf_dir }}/console.json"
+    owner: rustnode
+    group: rust
+  tags:
+   - install
+   - reinstall
+
+- name: Modify console.json
+  shell: >
+    jq ".config = $(jq . {{ rustnode_conf_dir }}/console.json)" "{{ rustnode_conf_dir }}/console_template.json"
+  register: json
+  tags:
+   - install
+   - reinstall
+
+- name: Modify console.json
+  copy:
+    content: "{{ json.stdout }}"
+    dest: "{{ rustnode_conf_dir }}/console.json"
+    owner: rustnode
+    group: rust
+  tags:
+   - install
+   - reinstall

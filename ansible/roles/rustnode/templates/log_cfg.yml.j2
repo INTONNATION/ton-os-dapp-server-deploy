@@ -1,0 +1,71 @@
+# Scan this file for changes every 30 seconds
+# https://docs.rs/log4rs/0.8.3/log4rs/encode/pattern/index.html
+refresh_rate: 30 seconds
+
+appenders:
+  stdout:
+    kind: console
+    encoder:
+      pattern: "{d(%s.%f)} {l} [{h({t})}] {I}: {m}{n}"
+
+  stdout_ref:
+    kind: console
+    encoder:
+      pattern: "{f}:{L} {l} [{h({t})}] {I}: {m}{n}"
+
+  tvm_stdout:
+    kind: console
+    encoder:
+      pattern: "{m}{n}"
+
+root:
+  level: {{ logging.level.root }}
+  appenders:
+    - console
+
+loggers:
+  # node messages
+  node:
+    level: {{ logging.level.node | default(logging.level.root) }}
+    appenders:
+      - stdout
+
+  ton_node:
+    level: {{ logging.level.ton_node | default(logging.level.root) }}
+    additive: false
+    appenders:
+      - stdout
+
+  # adnl messages
+  adnl:
+    level: {{ logging.level.adnl | default(logging.level.root) }}
+    appenders:
+      - stdout
+
+  # block messages
+  ton_block:
+    level: {{ logging.level.ton_block | default(logging.level.root) }}
+    appenders:
+      - stdout
+
+  # block messages
+  executor:
+    level: {{ logging.level.executor | default(logging.level.root) }}
+    appenders:
+      - stdout
+
+  # tvm messages
+  tvm:
+    level: {{ logging.level.tvm | default(logging.level.root) }}
+    appenders:
+      - tvm_stdout
+
+  librdkafka:
+    level: {{ logging.level.librdkafka | default(logging.level.root) }}
+    appenders:
+      - stdout
+
+  validator:
+    level: {{ logging.level.validator | default(logging.level.root) }}
+    appenders:
+      - stdout_ref

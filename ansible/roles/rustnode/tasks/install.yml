@@ -1,0 +1,53 @@
+---
+- name: Template env file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - {"src": "env.sh.j2", "dest": "{{ scripts_dir }}/env.sh"}
+  when: build == true
+  tags:
+   - install
+   - upgrade
+
+- name: Create rustnode user
+  user:
+    name: rustnode
+    create_home: no
+    shell: /usr/sbin/nologin
+    group: rust
+  tags:
+   - install
+
+- name: Start remote build
+  shell: "cd {{ scripts_dir }} && . ./env.sh  && ./build.sh"
+  when: build == true
+  tags: 
+   - install
+   - upgrade
+
+- name: Install node tools from repo
+  shell: '{{ scripts_dir }}/get_release.sh {{ release_version }} {{ git_repo }}'
+  when: build == false
+  tags: 
+   - install
+   - upgrade
+
+- name: Keygen for console
+  command: keygen
+  tags:
+   - install
+   - reinstall
+  register: console
+
+- set_fact:
+    console_pub: "{{ console.stdout | from_json | json_query('public') | to_json }}"
+  tags:
+   - install
+   - reinstall
+
+- set_fact:
+    console_pvt: "{{ console.stdout | from_json | json_query('private') | to_json }}"
+  tags:
+   - install
+   - reinstall

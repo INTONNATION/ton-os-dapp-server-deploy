@@ -1,0 +1,10 @@
+---
+- name: Remove databases
+  file:
+    state: absent
+    path: "{{ item }}/"
+  with_items:
+   - "{{ rustnode_conf_dir }}"
+   - "{{ database_path }}"
+  tags:
+   - reinstall
