@@ -1,3 +1,0 @@
-# elasticsearch service
-
-discovery_type: "single-node"

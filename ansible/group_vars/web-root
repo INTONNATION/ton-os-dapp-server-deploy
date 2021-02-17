@@ -1,8 +1,0 @@
-# web.root service
-
-protocol: http
-#protocol: https
-
-WEBROOT_VIRTUAL_HOST: "web-root"
-#LETSENCRYPT_HOST: ""
-LETSENCRYPT_EMAIL: "senegalelastico@gmail.com"

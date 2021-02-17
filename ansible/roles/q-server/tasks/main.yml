@@ -1,36 +1,36 @@
 
 - name: Create directory
   command: mkdir -p /opt/{{ role_name }}/build
-  tags: up
+  tags: install
 
 - name: "Git ton-q-server checkout"
   unarchive:
     src: "https://github.com/tonlabs/ton-q-server/archive/{{ version }}.zip"
     dest: "/opt/{{ role_name }}/build"
     remote_src: yes
-  tags: up
+  tags: install
 
 - name: Move foo to bar
   shell: mv /opt/{{ role_name }}/build/ton-q-server-{{ version }} /opt/{{ role_name }}/build/ton-q-server
-  tags: up
+  tags: install
   
 - name: "Template docker-compose.yml"
   template:
     src: 'docker-compose.yml'
     dest: '/opt/{{ role_name }}'
     mode: 0755
-  tags: up
+  tags: install
 
 - name: "Copy build files"
   copy:
     src: '.'
     dest: '/opt/{{ role_name }}/build'
     mode: 0755
-  tags: up
+  tags: install
     
 - name: "Run docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose build --no-cache && docker-compose up -d --build'
-  tags: up
+  tags: install
 
 - name: "Shut down docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose down'

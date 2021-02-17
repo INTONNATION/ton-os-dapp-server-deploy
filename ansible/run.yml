@@ -1,18 +1,10 @@
 ---
 - name: proxy
-  hosts: 
-   - proxy
+  hosts: proxy
   remote_user: root
   roles:
     - pre-install
     - proxy
-
-- name: web-root
-  hosts: web-root
-  remote_user: root
-  roles:
-    - pre-install
-    - web-root
 
 - name: arangodb
   hosts: arangodb
@@ -35,37 +27,9 @@
     - pre-install
     - kafka
 
-- name: statsd
-  hosts: statsd
+- name: rustnode
+  hosts: rustnode
   remote_user: root
   roles:
-    - pre-install
-    - statsd
-
-- name: ton-node
-  hosts: ton-node
-  remote_user: root
-  roles:
-    - pre-install
-    - ton-node
-
-- name: ELK
-  hosts: ELK
-  remote_user: root
-  roles:
-    - pre-install
-    - ELK
-
-- name: monitoring-server
-  hosts: monitoring-server
-  remote_user: root
-  roles:
-    - pre-install
-    - monitoring-server
-
-- name: monitoring-node
-  hosts: monitoring-node
-  remote_user: root
-  roles:
-    - pre-install
-    - monitoring-node
+   - statsd
+   - rustnode

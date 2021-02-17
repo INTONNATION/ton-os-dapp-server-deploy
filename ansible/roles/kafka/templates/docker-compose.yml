@@ -16,11 +16,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 40s
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
-        tag: "zookeeper"
 
   kafka:
     image: confluentinc/cp-kafka:5.3.1
@@ -52,11 +47,6 @@ services:
       ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
     volumes:
       - data:/var/lib/kafka/data
-    logging: 
-      driver: gelf 
-      options:
-        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
-        tag: "kafka"
 
   connect:
     image: confluentinc/cp-kafka-connect:5.3.1
@@ -105,12 +95,6 @@ services:
       retries: 3
       start_period: 60s
     mem_limit: 30G
-    logging: 
-      driver: gelf 
-      options:
-        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
-        tag: "connect"
-
 
   schema-registry:
     image: confluentinc/cp-schema-registry:5.3.1
@@ -155,12 +139,6 @@ services:
       ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
     networks:
       - proxy_nw
-    logging: 
-      driver: gelf 
-      options:
-        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
-        tag: "check-connect"
-
 
 networks:
   proxy_nw:

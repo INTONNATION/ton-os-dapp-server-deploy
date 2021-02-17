@@ -1,25 +1,25 @@
 
 - name: "Create /opt dir"
   shell: 'mkdir -p /opt'
-  tags: up
+  tags: install
 
 - name: "Copy build files"
   copy:
     src: '.'
     dest: '/opt/{{ role_name }}/'
     mode: 0755
-  tags: up
+  tags: install
 
 - name: "Template docker-compose.yml"
   template:
     src: 'docker-compose.yml'
     dest: '/opt/{{ role_name }}'
     mode: 0755
-  tags: up
+  tags: install
 
 - name: "Run docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose up -d'
-  tags: up
+  tags: install
 
 - name: "Shut down docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose down'
