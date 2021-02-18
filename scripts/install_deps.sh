@@ -2,8 +2,11 @@
 
 echo "INFO: install dependencies..."
 
+echo "deb [arch=amd64] https://packages.confluent.io/deb/5.5 stable main" >> /etc/apt/sources.list
+
 apt-get update && apt-get install -y \
     librdkafka1 \
+    librdkafka-dev \
     unzip \
     curl \
     wget \

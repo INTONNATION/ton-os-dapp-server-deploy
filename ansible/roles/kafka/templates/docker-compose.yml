@@ -111,11 +111,6 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: '{{ SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL }}'
       SCHEMA_REGISTRY_JMX_PORT: '{{ SCHEMA_REGISTRY_JMX_PORT }}'
       ADVERTISED_LISTENER: '{{ ADVERTISED_LISTENER }}'
-    logging: 
-      driver: gelf 
-      options:
-        gelf-address: "udp://{{ hostvars[groups['ELK'][0]].inventory_hostname }}:12201"
-        tag: "schema-registry"
     networks:
       - proxy_nw
     volumes:

@@ -11,7 +11,7 @@
   tags: install
 
 - name: Move foo to bar
-  shell: mv /opt/{{ role_name }}/build/ton-q-server-{{ version }} /opt/{{ role_name }}/build/ton-q-server
+  shell: "rm -rf /opt/{{ role_name }}/build/ton-q-server && mv /opt/{{ role_name }}/build/ton-q-server-{{ version }} /opt/{{ role_name }}/build/ton-q-server"
   tags: install
   
 - name: "Template docker-compose.yml"

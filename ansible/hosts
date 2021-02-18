@@ -4,7 +4,7 @@
 [kafka]
 51.195.105.161
 
-[ton-node]
+[rustnode]
 51.195.105.161
 
 [q-server]
