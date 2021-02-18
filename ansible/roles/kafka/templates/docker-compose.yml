@@ -23,8 +23,8 @@ services:
     restart: unless-stopped
     depends_on:
       - zookeeper
-    expose:
-      - "9092"
+    ports:
+      - "9092:9092"
     networks:
       - proxy_nw
     environment:
@@ -104,8 +104,8 @@ services:
     depends_on:
       - zookeeper
       - kafka
-    expose:
-      - 8081
+    ports:
+      - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: '{{ SCHEMA_REGISTRY_HOST_NAME }}'
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: '{{ SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL }}'
