@@ -11,7 +11,7 @@
     },
     "kafka_consumer_config": {
         "group_id": "101",
-        "brokers": "kafka",
+        "brokers": "{{ inventory_hostname }}",
         "topic": "requests",
         "session_timeout_ms": 6000,
         "run_attempt_timeout_ms": 1000
@@ -19,7 +19,7 @@
     "external_db_config": {
         "block_producer": {
             "enabled": true,
-            "brokers": "kafka",
+            "brokers": "{{ inventory_hostname }}",
             "message_timeout_ms": 100,
             "topic": "blocks",
             "attempt_timeout_ms": 100,
@@ -28,7 +28,7 @@
         },
         "message_producer": {
             "enabled": true,
-            "brokers": "kafka",
+            "brokers": "{{ inventory_hostname }}",
             "message_timeout_ms": 100,
             "topic": "messages",
             "attempt_timeout_ms": 100,
@@ -37,7 +37,7 @@
         },
         "transaction_producer": {
             "enabled": true,
-            "brokers": "kafka",
+            "brokers": "{{ inventory_hostname }}",
             "message_timeout_ms": 100,
             "topic": "transactions",
             "attempt_timeout_ms": 100,
@@ -46,7 +46,7 @@
         },
         "account_producer": {
             "enabled": true,
-            "brokers": "kafka",
+            "brokers": "{{ inventory_hostname }}",
             "message_timeout_ms": 100,
             "topic": "accounts",
             "attempt_timeout_ms": 100,
@@ -55,7 +55,7 @@
         },
         "block_proof_producer": {
             "enabled": true,
-            "brokers": "kafka",
+            "brokers": "{{ inventory_hostname }}",
             "message_timeout_ms": 100,
             "topic": "blocks_signatures",
             "attempt_timeout_ms": 100,
