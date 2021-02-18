@@ -23,7 +23,7 @@
 
 - name: "Shut down docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose down'
-  tags: down
+  tags: stop
 
 - name: "Check if kafka is available"
   shell: 'docker ps | grep check-connect | grep  healthy'

@@ -1,11 +1,4 @@
 ---
-- name: proxy
-  hosts: proxy
-  remote_user: root
-  roles:
-    - pre-install
-    - proxy
-
 - name: arangodb
   hosts: arangodb
   remote_user: root
@@ -17,14 +10,12 @@
   hosts: q-server
   remote_user: root
   roles:
-    - pre-install
     - q-server
 
 - name: kafka
   hosts: kafka
   remote_user: root
   roles:
-    - pre-install
     - kafka
 
 - name: rustnode

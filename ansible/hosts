@@ -1,19 +1,11 @@
-[proxy]
-
-[web-root]
-
 [arangodb]
+51.195.105.161
 
 [kafka]
-
-[statsd]
+51.195.105.161
 
 [ton-node]
+51.195.105.161
 
 [q-server]
-
-[ELK]
-
-[monitoring-server]
-
-[monitoring-node]
+51.195.105.161

@@ -1,4 +1,47 @@
 ---
+- name: Remove Scripts dir
+  file:
+    state: absent
+    path: "{{ item }}/"
+  with_items:
+   - "{{ scripts_dir }}"
+  tags:
+   - upgrade
+
+- name: create rust user group
+  group:
+    name: rust
+  tags:
+    - install
+
+- name: Create Scripts dir
+  file:
+    state: directory
+    path: "{{ item }}/"
+    mode: 0775
+    group: rust
+  with_items:
+   - "{{ scripts_dir }}"
+  tags:
+   - install
+   - upgrade
+
+- name: Copy scripts to remote
+  copy:
+    src: "{{ item }}"
+    dest: "{{ scripts_dir }}"
+    mode: 0775
+    group: rust
+  with_fileglob:
+    - ../scripts/*
+  tags: 
+    - install
+    - upgrade
+
+- name: Install dependencies
+  shell: '{{ scripts_dir }}/install_deps.sh'
+  tags: install
+
 - name: Template env file
   template:
     src: "{{ item.src }}"
