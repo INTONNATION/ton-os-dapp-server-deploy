@@ -20,12 +20,12 @@
   tags:
    - install
 
-#- name: Start remote build
-#  shell: "cd {{ scripts_dir }} && . ./env.sh  && ./build.sh"
-#  when: build == true
-#  tags: 
-#   - install
-#   - upgrade
+- name: Start remote build
+  shell: "cd {{ scripts_dir }} && . ./env.sh  && ./build.sh"
+  when: build == true
+  tags: 
+   - install
+   - upgrade
 
 - name: Install node tools from repo
   shell: '{{ scripts_dir }}/get_release.sh {{ release_version }} {{ git_repo }}'

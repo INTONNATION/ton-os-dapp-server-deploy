@@ -5,14 +5,12 @@
     path: "{{ item }}/"
   with_items:
    - "{{ scripts_dir }}"
-  when: scripts_dir is defined
   tags:
    - upgrade
 
 - name: create rust user group
   group:
     name: rust
-  when: scripts_dir is defined
   tags:
     - install
 
@@ -24,7 +22,6 @@
     group: rust
   with_items:
    - "{{ scripts_dir }}"
-  when: scripts_dir is defined
   tags:
    - install
    - upgrade
@@ -37,14 +34,12 @@
     group: rust
   with_fileglob:
     - ../scripts/*
-  when: scripts_dir is defined
   tags: 
     - install
     - upgrade
 
 - name: Install dependencies
   shell: '{{ scripts_dir }}/install_deps.sh'
-  when: scripts_dir is defined
   tags: install
 
 - name: "Install docker"

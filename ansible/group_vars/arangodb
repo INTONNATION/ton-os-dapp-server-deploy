@@ -1,6 +1,3 @@
-
-# required for pre-install
-scripts_dir: "/opt/rustnode/scripts"
 # arangodb service
 
 ARANGO_NO_AUTH: 1 # needs to be changed for production
