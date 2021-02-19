@@ -2,12 +2,12 @@
 # required for pre-install
 scripts_dir: "/opt/rustnode/scripts"
 # arangodb service
-#
+
 ARANGO_NO_AUTH: 1 # needs to be changed for production
 ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: 343579738368
 
 # arangodbni service
-#
+
 ARANGONI_NO_AUTH: 1 # needs to be changed for production
 
 # common
