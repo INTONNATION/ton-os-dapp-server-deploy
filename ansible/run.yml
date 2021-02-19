@@ -1,24 +1,24 @@
 ---
-#- name: arangodb
-#  hosts: arangodb
-#  remote_user: root
-#  roles:
-#    - pre-install
-#    - arangodb
-#
-#- name: q-server
-#  hosts: q-server
-#  remote_user: root
-#  roles:
-#    - pre-install
-#    - q-server
-#
-#- name: kafka
-#  hosts: kafka
-#  remote_user: root
-#  roles:
-#    - pre-install
-#    - kafka
+- name: arangodb
+  hosts: arangodb
+  remote_user: root
+  roles:
+    - pre-install
+    - arangodb
+
+- name: q-server
+  hosts: q-server
+  remote_user: root
+  roles:
+    - pre-install
+    - q-server
+
+- name: kafka
+  hosts: kafka
+  remote_user: root
+  roles:
+    - pre-install
+    - kafka
 
 - name: rustnode
   hosts: rustnode

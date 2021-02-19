@@ -3,7 +3,6 @@
 echo "INFO: install dependencies..."
 
 apt-get update && apt-get install -y \
-    unzip \
     curl \
     wget \
     gnupg2 \
@@ -20,7 +19,7 @@ apt-get update && apt-get install -y \
     git \
     jq
 
-echo "deb [arch=amd64] https://packages.confluent.io/deb/5.3 stable main" >> /etc/apt/sources.list
+echo "deb [arch=amd64] https://packages.confluent.io/deb/5.5 stable main" >> /etc/apt/sources.list
 wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb
 apt-get update && apt-get install -y \
     ./libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb \

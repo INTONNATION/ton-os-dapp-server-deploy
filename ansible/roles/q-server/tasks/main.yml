@@ -1,6 +1,6 @@
 
 - name: Create directory
-  sehll: "mkdir -p /opt/{{ role_name }}/build && apt -y install unzip"
+  shell: "mkdir -p /opt/{{ role_name }}/build && apt -y install unzip"
   tags: install
 
 - name: "Git ton-q-server checkout"
