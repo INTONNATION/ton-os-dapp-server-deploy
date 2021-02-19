@@ -3,6 +3,10 @@
   shell: "mkdir -p /opt/{{ role_name }}/build && apt -y install unzip"
   tags: install
 
+- name: Create directory for nginx
+  shell: "mkdir -p /opt/{{ role_name }}/nginx"
+  tags: install
+
 - name: "Git ton-q-server checkout"
   unarchive:
     src: "https://github.com/tonlabs/ton-q-server/archive/{{ version }}.zip"
@@ -17,6 +21,13 @@
 - name: "Template docker-compose.yml"
   template:
     src: 'docker-compose.yml'
+    dest: '/opt/{{ role_name }}/nginx'
+    mode: 0755
+  tags: install
+
+- name: "Template virtual-host.conf"
+  template:
+    src: 'virtual-host.conf'
     dest: '/opt/{{ role_name }}'
     mode: 0755
   tags: install

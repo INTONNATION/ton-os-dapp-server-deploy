@@ -23,6 +23,20 @@ services:
       - "4000"
     mem_limit: 5G
 
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - proxy_nw
+
+
+
 networks:
   proxy_nw:
     external: true
