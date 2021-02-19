@@ -9,7 +9,7 @@ build: true
 
 ton_node_build_args: "--release --features external_db,metrics" # with kafka enabled
 ton_node_github_repo: "https://github.com/tonlabs/ton-labs-node.git"
-ton_node_github_commit_id: "027b9e7"
+ton_node_github_commit_id: "c70e67a"
 ton_node_tools_github_repo: "https://github.com/tonlabs/ton-labs-node-tools.git"
 ton_node_tools_github_commit_id: "34f25ca"
 tonos_cli_github_repo: "https://github.com/tonlabs/tonos-cli.git"
@@ -21,6 +21,7 @@ statsd_conf_dir: "/etc/statsd"
 
 # DEV NET
 ton_network_global_conf_url: https://raw.githubusercontent.com/tonlabs/net.ton.dev/master/configs/net.ton.dev/ton-global.config.json
+msig_addr: "12658a2ea3dc3fe0ad34de2a8c364568adb4a01c8ee8e2dc08779afabd502816"
 
 # MAIN NET
 #ton_network_global_conf_url: https://raw.githubusercontent.com/tonlabs/main.ton.dev/master/configs/ton-global.config.json
