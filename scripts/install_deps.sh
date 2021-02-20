@@ -25,7 +25,6 @@ apt-get update && apt-get install -y \
     ./libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb \
     librdkafka1 \
     librdkafka++1 \
-    librdkafka-dev \
     librdkafka-dev
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 

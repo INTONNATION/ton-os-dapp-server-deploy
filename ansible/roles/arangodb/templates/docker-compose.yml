@@ -9,20 +9,14 @@ services:
       ARANGO_NO_AUTH: '{{ ARANGO_NO_AUTH }}'
       ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: '{{ ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY }}'
       ARANGO_ROOT_PASSWORD: '{{ ARANGO_ROOT_PASSWORD }}'
-      NETWORK_TYPE: '{{ NETWORK_TYPE }}'
-      INSTANCE_NAME: '{{ INSTANCE_NAME }}'
-      ARANGO_SERVICE_SERVICE_HOST: '{{ ARANGO_SERVICE_SERVICE_HOST }}'
-      ARANGO_SERVICE_SERVICE_PORT: '{{ ARANGO_SERVICE_SERVICE_PORT }}'
-      ARANGONI_SERVICE_SERVICE_HOST: '{{ ARANGONI_SERVICE_SERVICE_HOST }}'
-      ARANGONI_SERVICE_SERVICE_PORT: '{{ ARANGONI_SERVICE_SERVICE_PORT }}'
     networks:
       - proxy_nw
     volumes:
       - db3:/var/lib/arangodb3
       - data:/arango/db
       - ./arango-config:/arango/config
-    expose:
-      - "8529"
+    ports:
+      - "127.0.0.1:8529:8529"
     mem_limit: 32G
 
   arangodbni:
@@ -34,20 +28,14 @@ services:
     environment:
       ARANGO_NO_AUTH: '{{ ARANGONI_NO_AUTH }}'
       ARANGO_ROOT_PASSWORD: '{{ ARANGO_ROOT_PASSWORD }}'
-      NETWORK_TYPE: '{{ NETWORK_TYPE }}'
-      INSTANCE_NAME: '{{ INSTANCE_NAME }}'
-      ARANGO_SERVICE_SERVICE_HOST: '{{ ARANGO_SERVICE_SERVICE_HOST }}'
-      ARANGO_SERVICE_SERVICE_PORT: '{{ ARANGO_SERVICE_SERVICE_PORT }}'
-      ARANGONI_SERVICE_SERVICE_HOST: '{{ ARANGONI_SERVICE_SERVICE_HOST }}'
-      ARANGONI_SERVICE_SERVICE_PORT: '{{ ARANGONI_SERVICE_SERVICE_PORT }}'
     networks:
       - proxy_nw
     volumes:
       - db3ni:/var/lib/arangodb3
       - datani:/arango/db
       - ./arangoni-config:/arango/config
-    expose:
-      - "8529"
+    ports:
+      - "127.0.0.1:8530:8529"
     mem_limit: 32G
 
 networks:
