@@ -19,6 +19,7 @@ apt-get update && apt-get install -y \
     git \
     jq
 
+curl https://packages.confluent.io/deb/5.5/archive.key | apt-key add
 echo "deb [arch=amd64] https://packages.confluent.io/deb/5.5 stable main" >> /etc/apt/sources.list
 wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb
 apt-get update && apt-get install -y \
