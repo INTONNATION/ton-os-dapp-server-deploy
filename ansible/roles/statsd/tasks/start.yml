@@ -7,7 +7,7 @@
   with_items:
     - {"src": "statsd-mapping.yaml", "dest": "{{ statsd_conf_dir }}/statsd-mapping.yaml"}
     - {"src": "statsd-exporter.service", "dest": "/etc/systemd/system/statsd-exporter.service"}
-  tags: install
+  tags: install,reinstall
 
 - name: Start statsd
   systemd: 
@@ -15,4 +15,4 @@
     state: "started"
     name: "statsd-exporter"
     daemon_reload: yes
-  tags: start
+  tags: install,reinstall
