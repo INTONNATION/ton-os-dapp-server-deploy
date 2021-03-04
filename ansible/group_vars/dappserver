@@ -1,28 +1,13 @@
-# arangodb service
-
-ARANGO_NO_AUTH: 1 # needs to be changed for production
-ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: 343579738368
-ARANGONI_NO_AUTH: 1 # needs to be changed for production
-ARANGO_ROOT_PASSWORD: "" # needs to be changed for production
-
 # q-server service
 
 version: 0.31.2
 DAPP_HOST: "intonnation.freetondapps.com"
 
 # Rust TON node config
-# if true - all bins will be built remotely. If false - downloaded from Github releases. 
 build: true
-
-# this section is required in case of build:false
-#release_version: "latest"                    # Release from Github releases | now linked to TON node commit id or may be latest 
-#git_repo: "INTONNATION/FreeTON-Rust-Node"    # Github repo with releases
-
-# this section is required in case of build:true
-
-ton_node_build_args: "--release --features external_db,metrics" # with kafka enabled
+ton_node_build_args: "--release --features external_db,metrics" # external db is kafka, required for dapp server
 ton_node_github_repo: "https://github.com/tonlabs/ton-labs-node.git"
-ton_node_github_commit_id: "7655f14"
+ton_node_github_commit_id: "d182731"
 ton_node_tools_github_repo: "https://github.com/tonlabs/ton-labs-node-tools.git"
 ton_node_tools_github_commit_id: "34f25ca"
 tonos_cli_github_repo: "https://github.com/tonlabs/tonos-cli.git"
@@ -55,3 +40,10 @@ logging:
     #addr: ""                                 # defaults to monitoring-server inventory hostname
   level:
     root: debug # possible error warn info debug trace off
+
+# arangodb service
+
+ARANGO_NO_AUTH: 1
+ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: 343579738368
+ARANGONI_NO_AUTH: 1
+ARANGO_ROOT_PASSWORD: ""
