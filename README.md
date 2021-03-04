@@ -51,7 +51,8 @@ Tons OS Dapp server installation.
 git clone https://github.com/INTONNATION/ton-os-dapp-server-deploy 
 cd ansible
 ```
-2. For remote installation using ssh key specify remote server ip or hostname in hosts file:
+2. Configure variables in ansible/group_vars/dappserver.
+3. For remote installation using ssh key specify remote server ip or hostname in hosts file:
 ```
 [dappserver]
 131.17.89.33
@@ -60,7 +61,7 @@ and run:
 ```
 ansible-playbook -u root -i hosts --private-key <path to SSH private key> run.yml -t install
 ```
-3. For local installation add "localhost ansible_connection=local" to hosts file:
+4. For local installation add "localhost ansible_connection=local" to hosts file:
 ```
 [dappserver]
 localhost ansible_connection=local
@@ -69,10 +70,6 @@ and run:
 ```
 ansible-playbook -u root -i hosts run.yml -t install
 ```
-
-### Variables description
-
-Variables description could be found in ansible/group_vars/dappserver
 
 ## TONOS CLI examples
 
