@@ -3,9 +3,9 @@
 - name: dappserver
   hosts: dappserver
   roles:
-          #    - pre-install
-          #    - arangodb
-          #    - kafka
-          #    - q-server
-          #    - statsd
+    - pre-install
+    - arangodb
+    - kafka
+    - q-server
+    - statsd
     - rustnode
