@@ -1,8 +1,6 @@
 ---
 - name: Remove databases
-  file:
-    state: absent
-    path: "{{ item }}/"
+  shell: "rm -rf {{ item }}/*"
   with_items:
    - "{{ rustnode_conf_dir }}"
    - "{{ database_path }}"

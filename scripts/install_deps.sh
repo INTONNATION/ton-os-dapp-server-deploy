@@ -17,7 +17,8 @@ apt-get update && apt-get install -y \
     automake \
     clang \
     git \
-    jq
+    jq \
+    libzstd-dev
 
 curl https://packages.confluent.io/deb/5.5/archive.key | apt-key add
 echo "deb [arch=amd64] https://packages.confluent.io/deb/5.5 stable main" >> /etc/apt/sources.list

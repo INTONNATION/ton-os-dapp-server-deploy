@@ -1,29 +1,44 @@
 
 - name: "Create /opt dir"
   shell: 'mkdir -p /opt'
-  tags: install
+  tags: 
+    - install
+    - reinstall
 
 - name: "Copy build files"
   copy:
     src: '.'
     dest: '/opt/{{ role_name }}/'
     mode: 0755
-  tags: install
+  tags:
+    - install
+    - reinstall
 
 - name: "Template docker-compose.yml"
   template:
     src: 'docker-compose.yml'
     dest: '/opt/{{ role_name }}'
     mode: 0755
-  tags: install
-
-- name: "Run docker-compose"
-  shell: 'cd /opt/{{ role_name }} && docker-compose up -d'
-  tags: install
+  tags: 
+    - install
+    - reinstall
 
 - name: "Shut down docker-compose"
   shell: 'cd /opt/{{ role_name }} && docker-compose down'
-  tags: stop
+  tags: 
+   - stop
+   - reinstall
+ 
+- name: "Cleanup volumes"
+  shell: 'docker volume prune -f'
+  tags:
+   - reinstall
+
+- name: "Run docker-compose"
+  shell: 'cd /opt/{{ role_name }} && docker-compose up -d'
+  tags: 
+    - install
+    - reinstall
 
 - name: "Check if kafka is available"
   shell: 'docker ps | grep check-connect | grep  healthy'
@@ -31,4 +46,6 @@
   delay: 5
   register: result
   until: result.rc == 0
-  tags: install
+  tags: 
+    - install
+    - reinstall
